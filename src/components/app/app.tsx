@@ -96,25 +96,40 @@ const App = () => {
           }
         />
         <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
+          }
+        />
+        <Route
           path='/feed/:number'
           element={
-            <Modal
-              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-              onClose={() => navigate(-1)}
-            >
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                #{orderNumber && orderNumber.padStart(6, '0')}
+              </p>
               <OrderInfo />
-            </Modal>
+            </div>
           }
         />
         <Route
           path='/profile/orders/:number'
           element={
-            <Modal
-              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-              onClose={() => navigate(-1)}
-            >
-              <ProtectedRoute children={<OrderInfo />} />
-            </Modal>
+            <ProtectedRoute>
+              <div className={styles.detailPageWrap}>
+                <p
+                  className={`text text_type_main-large ${styles.detailHeader}`}
+                >
+                  #{orderNumber && orderNumber.padStart(6, '0')}
+                </p>
+                <OrderInfo />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route path='*' element={<NotFound404 />} />
@@ -147,12 +162,14 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal
-                title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-                onClose={() => navigate(-1)}
-              >
-                <ProtectedRoute children={<OrderInfo />} />
-              </Modal>
+              <ProtectedRoute>
+                <Modal
+                  title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                  onClose={() => navigate(-1)}
+                >
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>

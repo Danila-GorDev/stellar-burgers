@@ -6,18 +6,9 @@ export interface TConstructorItem {
   ingredients: TConstructorIngredient[];
 }
 
-export interface ConstructorState {
-  items: TConstructorItem;
-  orderRequest: boolean;
-  orderModalData: TOrder | null;
-  current: TIngredient | null;
-}
-
-const initialState: ConstructorState = {
-  items: { bun: null, ingredients: [] },
-  orderRequest: false,
-  orderModalData: null,
-  current: null
+const initialState: TConstructorItem = {
+  bun: null,
+  ingredients: []
 };
 
 export const constructorSlice = createSlice({
@@ -26,13 +17,13 @@ export const constructorSlice = createSlice({
   reducers: {
     addIngredient: (state, action) => {
       if (action.payload.type === 'bun') {
-        state.items.bun = action.payload;
+        state.bun = action.payload;
       } else {
-        state.items.ingredients.push(action.payload);
+        state.ingredients.push(action.payload);
       }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
-      state.items.ingredients = state.items.ingredients.filter(
+      state.ingredients = state.ingredients.filter(
         (ingredient) => ingredient.id !== action.payload
       );
     },
@@ -41,15 +32,16 @@ export const constructorSlice = createSlice({
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
       const { fromIndex, toIndex } = action.payload;
-      const ingredient = state.items.ingredients[fromIndex];
-      state.items.ingredients.splice(fromIndex, 1);
-      state.items.ingredients.splice(toIndex, 0, ingredient);
+      const ingredient = state.ingredients[fromIndex];
+      state.ingredients.splice(fromIndex, 1);
+      state.ingredients.splice(toIndex, 0, ingredient);
     },
     resetConstructor: (state) => {
-      state.items = { bun: null, ingredients: [] };
-      state.orderRequest = false;
-      state.orderModalData = null;
+      (state.bun = null), (state.ingredients = []);
     }
+  },
+  selectors: {
+    selectItems: (state: TConstructorItem) => state
   }
 });
 
@@ -59,5 +51,7 @@ export const {
   moveIngredient,
   resetConstructor
 } = constructorSlice.actions;
+
+export const { selectItems } = constructorSlice.selectors;
 
 export const constructorReducer = constructorSlice.reducer;
