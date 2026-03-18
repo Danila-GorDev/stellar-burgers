@@ -14,16 +14,12 @@ export const fetchIngredientById = createAsyncThunk<
   string,
   { rejectValue: string }
 >('ingredients/fetchIngredientById', async (id, { rejectWithValue }) => {
-  try {
-    const data = await getIngredientsApi();
-    const ingredient = data.find((item) => item._id === id);
-    if (!ingredient) {
-      return rejectWithValue('Ингредиент не найден');
-    }
-    return ingredient;
-  } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : 'Ошибка загрузки ингредиента'
-    );
+  const data = await getIngredientsApi();
+  const ingredient = data.find((item) => item._id === id);
+
+  if (!ingredient) {
+    return rejectWithValue('Ингредиент не найден');
   }
+
+  return ingredient;
 });

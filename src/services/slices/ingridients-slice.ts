@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
 import {
   fetchIngredientById,
@@ -9,14 +9,14 @@ interface IngredientsState {
   item: TIngredient | null;
   data: TIngredient[];
   isLoading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
   item: null,
   data: [],
   isLoading: false,
-  error: null
+  error: undefined
 };
 
 export const ingredientsSlice = createSlice({
@@ -34,22 +34,19 @@ export const ingredientsSlice = createSlice({
     builder
       .addCase(fetchIngredients.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = undefined;
       })
-      .addCase(
-        fetchIngredients.fulfilled,
-        (state, action: PayloadAction<TIngredient[]>) => {
-          state.data = action.payload;
-          state.isLoading = false;
-        }
-      )
+      .addCase(fetchIngredients.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.isLoading = false;
+      })
       .addCase(fetchIngredients.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message;
       })
       .addCase(fetchIngredientById.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(fetchIngredientById.fulfilled, (state, action) => {
         state.item = action.payload;
@@ -57,7 +54,7 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(fetchIngredientById.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message;
       });
   }
 });

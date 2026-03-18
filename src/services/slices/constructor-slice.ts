@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
+import { TConstructorIngredient } from '@utils-types';
 
 export interface TConstructorItem {
-  bun: TIngredient | null;
+  bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 }
 
-const initialState: TConstructorItem = {
+export const initialState: TConstructorItem = {
   bun: null,
   ingredients: []
 };
@@ -22,9 +22,9 @@ export const constructorSlice = createSlice({
         state.ingredients.push(action.payload);
       }
     },
-    removeIngredient: (state, action: PayloadAction<string>) => {
+    removeIngredient: (state, action) => {
       state.ingredients = state.ingredients.filter(
-        (ingredient) => ingredient.id !== action.payload
+        (ingredient) => ingredient.id !== action.payload.id
       );
     },
     moveIngredient: (
@@ -41,7 +41,7 @@ export const constructorSlice = createSlice({
     }
   },
   selectors: {
-    selectItems: (state: TConstructorItem) => state
+    selectItems: (state) => state
   }
 });
 

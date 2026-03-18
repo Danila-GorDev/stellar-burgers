@@ -14,7 +14,7 @@ export type userState = {
   error: string | null;
 };
 
-const initialState: userState = {
+export const initialState: userState = {
   isAuthChecked: false,
   user: {
     email: '',
@@ -50,12 +50,12 @@ export const userSlice = createSlice({
 
     builder
       .addCase(loginUser.pending, (state) => {
-        state.error = null;
+        state.error = '';
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
-        state.error = null;
+        state.error = '';
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isAuthChecked = false;
@@ -66,6 +66,7 @@ export const userSlice = createSlice({
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.error = '';
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.isAuthChecked = false;
@@ -74,11 +75,12 @@ export const userSlice = createSlice({
 
     builder
       .addCase(updateUserProfile.pending, (state) => {
-        state.error = null;
+        state.error = '';
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.isAuthChecked = true;
         state.user = action.payload.user;
+        state.error = '';
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.isAuthChecked = false;
@@ -88,6 +90,7 @@ export const userSlice = createSlice({
     builder.addCase(logoutUser.fulfilled, (state, action) => {
       state.isAuthChecked = false;
       state.user = { email: '', name: '' };
+      state.error = '';
     });
   }
 });
