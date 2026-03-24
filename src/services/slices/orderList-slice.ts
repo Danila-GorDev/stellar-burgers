@@ -5,11 +5,13 @@ import { fetchMyOrders } from '../actions/order-actions';
 export interface TOrdersState {
   orders: TOrder[];
   loading: boolean;
+  error: string | undefined;
 }
 
 export const initialState: TOrdersState = {
   orders: [],
-  loading: true
+  loading: true,
+  error: undefined
 };
 
 export const myOrders = createSlice({
@@ -21,15 +23,16 @@ export const myOrders = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchMyOrders.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchMyOrders.fulfilled, (state, action) => {
         state.orders = action.payload;
         state.loading = false;
       })
-      .addCase(fetchMyOrders.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchMyOrders.rejected, (state) => {
+      .addCase(fetchMyOrders.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
       });
   }
 });
